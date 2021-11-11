@@ -1,4 +1,4 @@
-# C/C++ interview questions
+# C/C++ questions
 ## size of Primitive Data Types
 C stacndard only defines min size for primitive data types. 
 note, long / pointer / size_t (unsigned type) are platform-dependency (32-bits/64-bits)
@@ -232,7 +232,7 @@ base is virtual (runtime polymorphism)
 In computer programming, operator overloadingis a specific case of polymorphism in which some or all of doperators like +, =, or == have different implementations depending on the types of their 		arguments.
 
 ### [Advanced] What is the 'override' keyword in C++ used for? 
-[C++11] The override keyword serves two purposes:
+The override[C++11] keyword serves two purposes:
 1. It shows the reader of the code that "this is a virtual method, that is overriding a virtual method of the base class."
 2. The compiler also knows that it's an override, so it can "check" that you are not altering/adding new methods that you think are overrides.
 ```C++
@@ -254,11 +254,12 @@ class derived2: public base
 ```
 In derived2 the compiler will issue an error for "changing the type". Without override, at most the compiler would give a warning for "you are hiding virtual method by same name".
 
-### virtual: dynamic binding in C++
+### virtual: dynamic binding
 Let base class pointer / reference can transparently points to any derived class
-* virtual destructor 
-only declare a virtual destructor if a class is designed to be inherited. [Effective C++ #7]
-the destruction behavior is undefined if use base pointer points to derived instance
+* virtual destructor : only declare a virtual destructor if a class is designed to be inherited. [Effective C++ #7].
+
+notes: 
+* the destruction behavior is undefined if use base pointer points to derived instance
 The sequence of calling destructors is from the **most derived to base**. ex: call destructor from derived class then call destructor of base class to avoid memory leakage 
 ```C++
 #include <iostream>
@@ -283,9 +284,8 @@ Derive
 Base
 */
 ```
-notes: 
 * virtual overhead : there is a virtual pointer in each class pointing to a virtual table. 
-> not declare any virtual member function if a class is not designed to be inherited - vtpr overhead (one pointer size 32-bit or 64-bit depends on machine)
+    * not declare any virtual member function if a class is not designed to be inherited - vtpr overhead (one pointer size 32-bit or 64-bit depends on machine)
 * STL containers are not designed to be inherited, which means there is the destructor is not declared as virtual 
 * pure virtual member function : for any Class with ANY pure virtual member function , that’s designed to be as abstract interface (not be instantiated)
 ```C++
