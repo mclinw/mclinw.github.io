@@ -1,6 +1,9 @@
 # C/C++ questions
 ## size of Primitive Data Types
 C stacndard only defines min size for primitive data types. 
+
+2 <= sizeof(short) <= sizeof(int) <= sizeof(long) >= 4
+
 note, long / pointer / size_t (unsigned type) are platform-dependency (32-bits/64-bits)
 
 ## padding, alignment, union
@@ -109,7 +112,7 @@ void multiply(int a, int b)
     void (*fun_ptr_arr[])(int, int) = {add, subtract, multiply};
    (*fun_ptr_arr[ch])(a, b);
 ``` -->
-## What is the main difference between struct and class?
+## difference between struct and class?
 Answer: default access level different. struct public members by default, whlie class public private members by default 
 ## post-increment ‘itr++’ v.s. pre-increment ‘++itr’ operator.
 post-increment ‘itr++’ operator is more expensive than the pre-increment ‘++itr’ operator.
@@ -162,7 +165,7 @@ A feature of the C++ programming language (template metaprogramming) that allow 
 template<class X>//can replace 'class" keyword by "typename" keyword
 X func( X a,X b) {return a;}
 ```
-## What is the diffence between overloading V.S. template?
+## difference between overloading V.S. template?
 * Function templates make the function perform the same task for different data types.
 * Function overloading makes the function to performs different task for different parameters you are passing.
 
@@ -209,7 +212,7 @@ catch (...) {
 // others not catch above 
 }
 ```
-### stdexcept vs exception Headers in c++
+### header stdexcept vs exception in c++
     * exception: Defines the base class (i.e., std::exception) for all exceptions thrown by the elements of the standard library, along with several types and utilities to assist handling exceptions.
     * stdexcept : Defines a set of standard exceptions that both the library and programs can use to report common errors.
 ```C++
@@ -285,7 +288,7 @@ Base
 */
 ```
 * virtual overhead : there is a virtual pointer in each class pointing to a virtual table. 
-    * not declare any virtual member function if a class is not designed to be inherited - vtpr overhead (one pointer size 32-bit or 64-bit depends on machine)
+    > not declare any virtual member function if a class is not designed to be inherited - vtpr overhead (additional size of one pointer: 32-bit or 64-bit depends on machine)
 * STL containers are not designed to be inherited, which means there is the destructor is not declared as virtual 
 * pure virtual member function : for any Class with ANY pure virtual member function , that’s designed to be as abstract interface (not be instantiated)
 ```C++
@@ -389,13 +392,13 @@ for(auto it = v.begin() ; it 1= v.end() ;++i) ;
 ```C
 void f()
 {
- static int i = 0; // is initialed when 1st time execution to this func
- printf(“%d ”,i++);
+    static int i = 0; // is initialed when 1st time execution to this func
+    printf(“%d ”,i++);
 }
 int main()
 {
- for(int i=0;i<100;i++) f();
- return 0;
+    for(int i=0;i<100;i++) f();
+    return 0;
 }
 //output result: 0 1 2 ...99
 ```
@@ -420,7 +423,7 @@ A programming language feature that allows values of different data types to be 
 private constructor or private destructor
 
 ```C++
-//related topic singleton pattern
+//related topic: singleton pattern
 class singleton {
 public:
     static singleton*  get_singleton() ;
@@ -431,8 +434,7 @@ private :
 }
 ```
 
-## compiler directive 
-to prevent conflict during compilation
+## compiler directive to prevent conflict during compilation
 比如你有兩個C文件，這兩個C文件都include了同一個頭文件。而編譯時，這兩個C文件要一同編譯成一個可運行文件，於是問題來了，大量的聲明衝突。
 還是把頭文件的內容都放在#ifndef和#endif中吧。不管你的頭文件會不會被多個文件引用，你都要加上這個。一般格式是這樣的：
 ```C
@@ -447,15 +449,15 @@ to prevent conflict during compilation
 ```C
 void RemoveHead(node *head)
 {
-	free(head);
-	head = head->next;
+    free(head);
+    head = head->next;
 }
 //fixed: 
 void RemoveHead(node *head)
 {
-	node* tmp = head;
-	head = head->next;
-	free(tmp);
+    node* tmp = head;
+    head = head->next;
+    free(tmp);
 }
 ```
 ```C++
@@ -463,27 +465,27 @@ void RemoveHead(node *head)
 class A
 {
 public:
-	A(int a):_x(a),_y(_x){}
-	int _y; 
-	int _x; 
+    A(int a):_x(a),_y(_x){}
+    int _y; 
+    int _x; 
 }
 ```
 Answer: non-static data members are initialized **in the order they were declared** in the class definition (again regardless of the order of the mem-initializers).
 
-```C
+```C++
 char* a = new char[20];
 delete a []; // delete [] a
 ```
 ```C++
 string& print()
 {
-	string s(“abc”);
-	return s; //error : return local var
+    string s(“abc”);
+    return s; //error : return local var
 }
 // fix : return object when you should  [effective C++]
 string print()
 {
-	string s(“abc”);
-	return s; 
+    string s(“abc”);
+    return s; 
 }
 ```
