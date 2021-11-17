@@ -160,7 +160,7 @@ The deallocation is done using delete operation when allocation is done by new b
 In general , placement new means an operator new overload version with extra argument , not required to be allocated address. [effective C++]
 
 ## template
-A feature of the C++ programming language (template metaprogramming) that allow 		functions and classes to operate with generic types. This allows a 	function or class to 		work on many different data types without being rewritten for each one.
+A feature of the C++ programming language (template metaprogramming) that allow functions and classes to operate with generic types. This allows a function or class to work on many different data types without being rewritten for each one.
 ```C++
 template<class X>//can replace 'class" keyword by "typename" keyword
 X func( X a,X b) {return a;}
@@ -434,16 +434,19 @@ private :
 }
 ```
 
-## compiler directive to prevent conflict during compilation
-比如你有兩個C文件，這兩個C文件都include了同一個頭文件。而編譯時，這兩個C文件要一同編譯成一個可運行文件，於是問題來了，大量的聲明衝突。
-還是把頭文件的內容都放在#ifndef和#endif中吧。不管你的頭文件會不會被多個文件引用，你都要加上這個。一般格式是這樣的：
+## once-only header ( wrapper #ifndef )
+If a header file happens to be included twice, the compiler will process its contents twice. This is very likely to cause an error, e.g. when the compiler sees the same structure definition twice. Even if it does not, it will certainly waste time.
+The standard way to prevent this is to enclose the entire real contents of the file in a conditional, like this:
 ```C
-// header.h
-#ifndef _STDIO_H_
-#define _STDIO_H_
-......
-#endif
+/* File foo.  */
+#ifndef FILE_FOO_SEEN
+#define FILE_FOO_SEEN
+
+the entire file
+
+#endif /* !FILE_FOO_SEEN */
 ```
+reference : https://gcc.gnu.org/onlinedocs/cpp/Once-Only-Headers.html
 
 # fix or find error 
 ```C
