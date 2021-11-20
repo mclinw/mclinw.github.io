@@ -4,14 +4,17 @@ C stacndard only defines min size for primitive data types.
 
 2 <= sizeof(short) <= sizeof(int) <= sizeof(long) >= 4
 
-note, long / pointer / size_t (unsigned type) are platform-dependency (32-bits/64-bits)
+usually, long / pointer / size_t (unsigned type) are platform-dependency (32-bits/64-bits)
 
 ## padding, alignment, union
-Variable access shall be aligned according to CPU architecture spec. As a result, padding is needed between struct vars.
+reference: [Data structure alignment](https://en.wikipedia.org/wiki/Data_structure_alignment)
+>The CPU in modern computer hardware performs reads and writes to memory most efficiently when the data is naturally aligned, which generally means that the data's memory address is a multiple of the data size.
+>Data alignment is the aligning of elements according to their natural alignment. To ensure natural alignment, it may be necessary to insert some padding between structure elements or after the last element of a structure. For example, on a 32-bit machine, a data structure containing a 16-bit value followed by a 32-bit value could have 16 bits of padding between the 16-bit value and the 32-bit value to align the 32-bit value on a 32-bit boundary. 
+
 reference: https://magicjackting.pixnet.net/blog/post/221968938
 
 ```C
-//32-bit machine , 1-byte padding bt ch and sz (uint16 must align to 2)
+//example : 32-bit machine , 1-byte padding bt ch and sz (uint16 must align to 2)
     struct {
         uint8_t  ch;
         uint16_t sz;
