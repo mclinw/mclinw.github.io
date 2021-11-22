@@ -8,11 +8,11 @@ usually, long / pointer / size_t (unsigned type) are platform-dependency (32-bit
 
 ## padding, alignment, union
 reference: [Data structure alignment](https://en.wikipedia.org/wiki/Data_structure_alignment)
->The CPU in modern computer hardware performs reads and writes to memory most efficiently when the data is naturally aligned, which generally means that the data's memory address is a multiple of the data size.
->Data alignment is the aligning of elements according to their natural alignment. To ensure natural alignment, it may be necessary to insert some padding between structure elements or after the last element of a structure. For example, on a 32-bit machine, a data structure containing a 16-bit value followed by a 32-bit value could have 16 bits of padding between the 16-bit value and the 32-bit value to align the 32-bit value on a 32-bit boundary. 
+
+>The CPU in modern computer hardware performs reads and writes to memory most efficiently when the data is naturally aligned.
+>Data alignment is the aligning of elements according to their natural alignment. To ensure natural alignment, it may be necessary to insert some **padding** between structure elements or after the last element of a structure. For example, on a 32-bit machine, a data structure containing a 16-bit value followed by a 32-bit value could have 16 bits of padding between the 16-bit value and the 32-bit value to align the 32-bit value on a 32-bit boundary. 
 
 reference: https://magicjackting.pixnet.net/blog/post/221968938
-
 ```C
 //example : 32-bit machine , 1-byte padding bt ch and sz (uint16 must align to 2)
     struct {
@@ -26,7 +26,6 @@ reference: https://magicjackting.pixnet.net/blog/post/221968938
         uint32_t sz;
     } st2;
 ```
-
 ## pointer & reference
 ```C
 int A[3];// array of 3 ints
@@ -41,7 +40,7 @@ int *& p ;// reference to int pointer (int*)
     >That’s why there must be assigned an initial value while reference declared.
 ```C++
 int a = 1;
-int b =2;
+int b = 2;
 
 int &ref = a; 
 ref = b; // meaning is the same as a=2
@@ -60,13 +59,13 @@ char const *const p;
 
 //find error
 const char* p1;	// pointer to const char*
-char *const p2;	// error ! uninitialized const pointer
+char *const p2;	// error: uninitialized const pointer
 p1 = “abc”;
 p2 = “abc”;//error: assignment of read-only variable ‘p2’
 ```
 
 ## call by value, call by reference (address) 
-In the call by value method, a copy of the parameter is passed to the functions. For these copied values a new memory is assigned and changes made to these values do not reflect the variable in the main function.
+In the call by value method, a copy of the parameter is passed to the functions. For these copied values a new memory is assigned and changes made to these values do not reflect the variable in the caller.
 In call by reference method, we pass the address of the variable and the address is used to access the actual argument used in the function call. So changes made in the parameter alter the passing argument.
 
 ## function pointer 
@@ -83,54 +82,42 @@ void (*fun_ptr)(int) = fun;
 (*fun_ptr)(10);
 fun_ptr(10);
 
-//function pointer做為函式的參數
+//pass function pointer as argument, usually use "typedef" for readability
 typedef void (*fun_ptr)(int);
 int call_a_func2(fun_ptr call_this) {
     int output = call_this(7);
     return output;
 }
-// 不使用typedef的原始宣告方法
+//same as, pass function pointer as argument (not use typedef)
 int call_a_func2(int (*call_this)(int)) {
     int output = call_this(7);
     return output;
 }
-call_a_func2(fun) ; 
+
+call_a_func2(fun) ;
+
 ```
-<!-- 
-```C++
-// array of function pointers
-void add(int a, int b)
-{
-    printf("Addition is %d\n", a+b);
-}
-void subtract(int a, int b)
-{
-    printf("Subtraction is %d\n", a-b);
-}
-void multiply(int a, int b)
-{
-    printf("Multiplication is %d\n", a*b);
-}
-// fun_ptr_arr is an array of function pointers
-    void (*fun_ptr_arr[])(int, int) = {add, subtract, multiply};
-   (*fun_ptr_arr[ch])(a, b);
-``` -->
+
 ## difference between struct and class?
-Answer: default access level different. struct public members by default, whlie class public private members by default 
+Answer: default access level different. struct **public** members by default, whlie class **private** members by default 
+
 ## post-increment ‘itr++’ v.s. pre-increment ‘++itr’ operator.
 post-increment ‘itr++’ operator is more expensive than the pre-increment ‘++itr’ operator.
 The post-increment operator generates a copy of the element before proceeding with incrementing the element and returning the copy. Moreover, most compilers will automatically optimize i++ by converting it implicitly into ++i
+
 ## C++ memory allocation
 * operator new/delete: similar to malloc/free in C in allocate raw memory in heap
-* new operator/ delete operator  (expression): C++ Memory allocation
->‘new operator’ calls ‘operator new’ to allocate raw memory, then call constructor.
->‘delete operator’ calls dstor then call  ‘operator ‘delete to free memory in heap. 
+* new operator/delete operator (expression): C++ Memory allocation
+    * **new operator** calls "operator new" to allocate raw memory, then call cstor.
+    * **delete operator** calls dstor then call "operator delete" to free memory in heap. 
 ```C++
-X  *a  = new X() ;  // 2 steps: 1) call operator new + 2) call constructor
+X  *a  = new X() ;  // new operator 2 steps: 1) call operator new + 2) call cstor
 // X *a = new (operator new(sizeof(X)) X();
-delete a ;  // 1) call destructor + 2) call operator delete
+
+delete a ;  // 1) call dstor + 2) call operator delete
 // a->~X();
 // operator delete(a)
+
 
 X *a  = new X[2] ; 
 // void* buf = operator new[](3*sizeof(X));
@@ -148,19 +135,17 @@ New operator syntax with placement new
 new (address) (type) initializer
 ```
 
-As we can see, we can specify an address
-where we want a new object of given type 
-to be constructed.
+As we can see, we can specify an address where we want a new object of given type to be constructed.
 
 ```C++
 X *a  = new (address) X() ;  // placement new 
-delete a ; 
+delete a ; //no placement delete
 X *ar  = new (address) X[3] ;  // placement new 
-delete [] ar ; 
+delete [] ar ; //no placement delete
 ```
 
-The deallocation is done using delete operation when allocation is done by new but there is no placement delete, but if it is needed one can write it with the help of destructor
-In general , placement new means an operator new overload version with extra argument , not required to be allocated address. [effective C++]
+* The deallocation is done using delete operation when allocation is done by new but there is no placement delete, but if it is needed one can write it with the help of dstor.
+* In general, placement new means an operator new overload version with extra argument, not required to be allocated address. [Effective C++]
 
 ## template
 A feature of the C++ programming language (template metaprogramming) that allow functions and classes to operate with generic types. This allows a function or class to work on many different data types without being rewritten for each one.
@@ -168,10 +153,11 @@ A feature of the C++ programming language (template metaprogramming) that allow 
 template<class X>//can replace 'class" keyword by "typename" keyword
 X func( X a,X b) {return a;}
 ```
-## difference between overloading V.S. template?
+
+<!-- ## difference between overloading V.S. template?
 * Function templates make the function perform the same task for different data types.
 * Function overloading makes the function to performs different task for different parameters you are passing.
-
+ -->
 ## exception handling
 a programming language construct designed to handle the occurrence of exceptions, special conditions that change the normal flow of program execution.
 In general, an exception is handled (resolved) by saving the current state of execution in a predefined place and switching the execution to a specific subroutine known as an exception handler. Depending on the situation, the handler may later resume the execution at the original location using the saved information. For example, a page fault will usually allow the program to be resumed, while a division by zero might not be resolvable transparently.
@@ -183,14 +169,14 @@ try {
 catch () {
   // Block of code to handle errors
 }
-// throw exception could be any type like integer , string or object
+// throw exception could be any type like integer, string or object
 throw 0;
 throw “error”;
 throw string(“error”);
-throw exc_obj ;  // user-defined exception object , you can also declare exception obj by inherited std::exception
+throw exc_obj ;  // user-defined exception object, you can also declare exception obj by inheriting std::exception
 /* 
 exception is catched by type using catch clauses.
-The type of the exception object is compared against the exception declaration of each catch clause in turn unfile type match. the body if the catch clause is executed.
+The type of the exception object is compared against the exception declaration of each catch clause until type matching, the body of the catch clause is executed.
 */ 
 try {
 //throw exception; // Throw an exception when a problem arise
@@ -201,45 +187,43 @@ try {
 } catch (string &msg) {
     cerr << msg <<end;
 } catch (user_obj &e) {    // any user-defined object
-} catch (invalid_argument &e) {
+} catch (invalid_argument &e) { // exception object 
     /*standard exception object inherited from std::exception with a member function what() to return error message */
     cerr << e.what() << endl;    
-} catch (bad_alloc) {
-/*
-also can match a class type bad_alloc without declare an exception object because we are 
-interested only in catching the exception type and not in actually manipulation the object in catch clause 
-*/
+} catch (bad_alloc) { // class type
+    /*
+    also can match a class type bad_alloc without declare an exception object because we are 
+    interested only in catching the exception type and not in actually manipulation the object in catch clause
+    */
     cerr << “heap memory exhausted\n” ;
-}  
-catch (...) {
-// others not catch above 
+} catch (...) {// any other not catch above 
 }
 ```
+
 ### header stdexcept vs exception in c++
-    * exception: Defines the base class (i.e., std::exception) for all exceptions thrown by the elements of the standard library, along with several types and utilities to assist handling exceptions.
-    * stdexcept : Defines a set of standard exceptions that both the library and programs can use to report common errors.
+* exception: Defines the base class (i.e., std::exception) for all exceptions thrown by the elements of the standard library, along with several types and utilities to assist handling exceptions.
+* stdexcept : Defines a set of standard exceptions that both the library and programs can use to report common errors.
 ```C++
-#include <stdexcept>	
+#include <stdexcept>
   throw invalid_argument("MyFunc argument too large.");
 ```
 reference: https://stackoverflow.com/questions/25163105/stdexcept-vs-exception-headers-in-c
 
 ##  polymorphism 
 The two types of polymorphism in c++ are:
-1. Compile Time (static) Polymorphism: operation overloading/function overloading including template [effective C++ #41]
+1. Compile Time (static) Polymorphism: operation overloading/function overloading including template [Effective C++ #41]
 2. Runtime (dynamic) Polymorphism: virtual function
 
-### What is the difference bt overload & override?
+### difference bt overload & override?
 * override: same func name, choose func depend on object type 
-base is virtual (runtime polymorphism)
 * overload: same func name, choose func depend on diff parameters list
 
-### operator overloading is compile-time polymorphism [effective C++ #41] 
-In computer programming, operator overloadingis a specific case of polymorphism in which some or all of doperators like +, =, or == have different implementations depending on the types of their 		arguments.
+### operator overloading is compile-time polymorphism [Effective C++ #41] 
+In computer programming, operator overloadingis a specific case of polymorphism in which some or all of operators like +, =, or == have different implementations depending on the types of their arguments.
 
 ### [Advanced] What is the 'override' keyword in C++ used for? 
 The override[C++11] keyword serves two purposes:
-1. It shows the reader of the code that "this is a virtual method, that is overriding a virtual method of the base class."
+1. It shows the reader of the code that "this is a virtual method, that is overriding a virtual method of the base class.
 2. The compiler also knows that it's an override, so it can "check" that you are not altering/adding new methods that you think are overrides.
 ```C++
 class base
@@ -261,12 +245,10 @@ class derived2: public base
 In derived2 the compiler will issue an error for "changing the type". Without override, at most the compiler would give a warning for "you are hiding virtual method by same name".
 
 ### virtual: dynamic binding
-Let base class pointer / reference can transparently points to any derived class
-* virtual destructor : only declare a virtual destructor if a class is designed to be inherited. [Effective C++ #7].
-
-notes: 
+* Let base class pointer / reference can transparently points to any derived class
+notes.
 * the destruction behavior is undefined if use base pointer points to derived instance
-The sequence of calling destructors is from the **most derived to base**. ex: call destructor from derived class then call destructor of base class to avoid memory leakage 
+* sequence of calling destructors is from the **most derived to base**. ex: call destructor from derived class then call destructor of base class to avoid memory leakage 
 ```C++
 #include <iostream>
 using namespace std;
@@ -291,7 +273,7 @@ Base
 */
 ```
 * virtual overhead : there is a virtual pointer in each class pointing to a virtual table. 
-    > not declare any virtual member function if a class is not designed to be inherited - vtpr overhead (additional size of one pointer: 32-bit or 64-bit depends on machine)
+    > not declare any virtual member function if a class is not designed to be inherited - vtpr overhead (additional size of one pointer: 32-bit or 64-bit depends on machine) [Effective C++ #7]
 * STL containers are not designed to be inherited, which means there is the destructor is not declared as virtual 
 * pure virtual member function : for any Class with ANY pure virtual member function , that’s designed to be as abstract interface (not be instantiated)
 ```C++
@@ -306,7 +288,8 @@ class B: public A
 public:
     B(){ cout<<"B ";} 
     ~B(){}
-}
+};
+
 A a ; // compile error: cannot declare variable ‘a’ to be of abstract type ‘A’
 A *b = new B()  ; // compile error: construct can’t call A() .
 ```
@@ -379,6 +362,7 @@ int test::cast()
     return 0 ;     
 }
 ```
+
 ## C++ keywords : auto [C++11], extern, mutable, static
 * auto [C++11]: 新的變數類型，讓編譯器自動判斷其變數的類型
 1. compiler to determine the data type 
@@ -390,7 +374,7 @@ for(auto it = v.begin() ; it 1= v.end() ;++i) ;
 ```
 * extern: tell the compiler this var or function already be declared in another file (translation unit)
 * mutable: A member data is declared as mutable , that means even a constant member function could change its value.
-    > for logical constantness [effective c++]
+    > for logical constantness [Effective C++]
 * static 
 ```C
 void f()
@@ -488,7 +472,7 @@ string& print()
     string s(“abc”);
     return s; //error : return local var
 }
-// fix : return object when you should  [effective C++]
+// fix : return object when you should  [Effective C++]
 string print()
 {
     string s(“abc”);
