@@ -9,8 +9,9 @@ usually, long / pointer / size_t (unsigned type) are platform-dependency (32-bit
 ## padding, alignment, union
 reference: [Data structure alignment](https://en.wikipedia.org/wiki/Data_structure_alignment)
 
->The CPU in modern computer hardware performs reads and writes to memory most efficiently when the data is naturally aligned.
->Data alignment is the aligning of elements according to their natural alignment. To ensure natural alignment, it may be necessary to insert some **padding** between structure elements or after the last element of a structure. For example, on a 32-bit machine, a data structure containing a 16-bit value followed by a 32-bit value could have 16 bits of padding between the 16-bit value and the 32-bit value to align the 32-bit value on a 32-bit boundary. 
+>The CPU performs reads and writes to memory most efficiently when the data is naturally aligned. 
+To ensure natural alignment, it may be necessary to insert some **padding** between structure elements or after the last element of a structure. 
+For example, on a 32-bit machine, a data structure containing a 16-bit value followed by a 32-bit value could have 16 bits of padding between the 16-bit value and the 32-bit value to align the 32-bit value on a 32-bit boundary. 
 
 reference: https://magicjackting.pixnet.net/blog/post/221968938
 ```C
@@ -108,10 +109,10 @@ The post-increment operator generates a copy of the element before proceeding wi
 ## C++ memory allocation
 * operator new/delete: similar to malloc/free in C in allocate raw memory in heap
 * new operator/delete operator (expression): C++ Memory allocation
-    * **new operator** calls "operator new" to allocate raw memory, then call cstor.
+    * **new operator** calls "operator new" to allocate raw memory, then call constructor(ctor).
     * **delete operator** calls dstor then call "operator delete" to free memory in heap. 
 ```C++
-X  *a  = new X() ;  // new operator 2 steps: 1) call operator new + 2) call cstor
+X  *a  = new X() ;  // new operator 2 steps: 1) call operator new + 2) call ctor
 // X *a = new (operator new(sizeof(X)) X();
 
 delete a ;  // 1) call dstor + 2) call operator delete
@@ -154,10 +155,9 @@ template<class X>//can replace 'class" keyword by "typename" keyword
 X func( X a,X b) {return a;}
 ```
 
-<!-- ## difference between overloading V.S. template?
+## overloading V.S. template?
 * Function templates make the function perform the same task for different data types.
 * Function overloading makes the function to performs different task for different parameters you are passing.
- -->
 ## exception handling
 a programming language construct designed to handle the occurrence of exceptions, special conditions that change the normal flow of program execution.
 In general, an exception is handled (resolved) by saving the current state of execution in a predefined place and switching the execution to a specific subroutine known as an exception handler. Depending on the situation, the handler may later resume the execution at the original location using the saved information. For example, a page fault will usually allow the program to be resumed, while a division by zero might not be resolvable transparently.
@@ -247,10 +247,11 @@ public:
 In DerivedTwice::f the compiler will issue an error for "changing the type". Without override, at most the compiler would give a warning for "you are hiding virtual method by same name".
 
 ### virtual: dynamic binding
-* Let base class pointer / reference can transparently points to any derived class
-notes.
-* the destruction behavior is undefined if use base pointer points to derived instance
+* Let base class pointer/reference can transparently points to any derived class notes.
 * sequence of calling destructors is from the **most derived to base**. ex: call destructor from derived class then call destructor of base class to avoid memory leakage 
+
+[Effective C++] Item 7: Declare destructors virtual in polymorphic base classes.
+  * the destruction behavior is undefined if use base pointer points to derived instance. that's why if class is decided to be inherated , dtor should be declared as virtual.
 ```C++
 #include <iostream>
 using namespace std;
@@ -262,20 +263,17 @@ class Derive:public Base{
 public:
     ~Derive()  {cout << "Derive"<< endl ;}
 };
-int main()
-{
-    Base *a = new Derive();
-    delete a; 
-    return 0;
-}
+
+Base *a = new Derive();
+delete a; 
 /*
 console output :
 Derive
 Base
 */
 ```
-* virtual overhead : there is a virtual pointer in each class pointing to a virtual table. 
-    > not declare any virtual member function if a class is not designed to be inherited - vtpr overhead (additional size of one pointer: 32-bit or 64-bit depends on machine) [Effective C++ #7]
+* virtual overhead : there is a virtual pointer in each class pointing to a virtual table.  
+    > not declare any virtual member function if a class is not designed to be inherited - vtpr overhead (additional size of one pointer: 32-bit or 64-bit depends on machine) 
 * STL containers are not designed to be inherited, which means there is the destructor is not declared as virtual 
 * pure virtual member function : for any Class with ANY pure virtual member function , that’s designed to be as abstract interface (not be instantiated)
 ```C++
@@ -293,7 +291,7 @@ public:
 };
 
 A a ; // compile error: cannot declare variable ‘a’ to be of abstract type ‘A’
-A *b = new B()  ; // compile error: construct can’t call A() .
+A *b = new B()  ; // compile error: ctor can’t call A() .
 ```
 ## class access specifier public/protected/private
 
@@ -318,12 +316,13 @@ X
 X
 X -->
 
-## [Class] special member functions are declared/defined by compiler
+## [Class] member functions are declared/defined by compiler (IF YOU did not declared/defined)
 Default constructor, copy constructor, assignment operator ,destructor ,address-of operator
 if a class does not explicitly declare these member functions, compiler will:
 1. implicitly declare them 
 2. implicitly define them , if they are needed.
 ```C++
+// empty class is not actual empty 
 class X {
 // public: 
 //     X() ; //Default constructor 
@@ -332,6 +331,10 @@ class X {
 //     X& operator=(const X&) ;//assignment operator
 //     X* operator&() ;//address-of operator
 }; 
+X a ; // default ctor  
+X b = a; // same as "X b(a)" // copy ctor  
+b = a ; // operator=
+//  dtor for a and b   
 ```
 ## type conversion
 ### c style
@@ -340,12 +343,18 @@ class X {
 (Child_C) base_obj ? valid? NO
 ```
 ### c++ style
+#### function notation
+```C++
+int i = int(0.1);
+float f  = int(i);
+```
+#### type conversion operator
 1.  static_case:**implicit** conversions between types (like int to float)
 2.  const_cast: remove const
 3.  reinterpret_cast: low level conversion like convert pointer to int (platform-dependency)
-4. dynamic_case (安全向下轉型): save downcase to convert a base ptr to derived ptr. very slow
+4. dynamic_case: save downcase (安全向下轉型) to convert a base ptr to derived ptr. very slow
    * if you only have a base* point to an derived object, you want to execute derived member function , need to converted to derived.
-   * [Advanced]: typeid operator to provide runtime identification, typeid returns type_info object to represent real class type  [Essential C++ P.164]
+   * [Advanced] **typeid** operator to provide runtime identification, typeid returns type_info object to represent real class type  [Essential C++ P.164]
 ```C++
 #include <typeinfo> // typeid operator
 class B {
@@ -365,7 +374,7 @@ int test::cast()
 }
 ```
 
-## C++ keywords : auto [C++11], extern, mutable, static
+## keywords : auto [C++11], extern, mutable, static
 * auto [C++11]: auto allow the compiler deduce the type of a variable from its initializer. 
     > Initial is necessary. Otherwise, the compiler is not able to know the type.
 ```C++
@@ -390,7 +399,6 @@ int main()
 }
 //output result: 0 1 2 ...99
 ```
-
 # OO and Design
 * 甚麼是《物件導向設計》?
     >《物件導向設計》最重要的精神是**模組化**(Modularity)與簡潔介面必須被**封裝**(Encapsulation)
