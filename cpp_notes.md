@@ -211,7 +211,7 @@ reference: https://stackoverflow.com/questions/25163105/stdexcept-vs-exception-h
 
 ##  polymorphism 
 The two types of polymorphism in c++ are:
-1. Compile Time (static) Polymorphism: operation overloading/function overloading including template [Effective C++ #41]
+1. Compile Time (static) Polymorphism: operation/function overloading including template [Effective C++ #41]
 2. Runtime (dynamic) Polymorphism: virtual function
 
 ### difference bt overload & override?
@@ -221,28 +221,30 @@ The two types of polymorphism in c++ are:
 ### operator overloading is compile-time polymorphism [Effective C++ #41] 
 In computer programming, operator overloadingis a specific case of polymorphism in which some or all of operators like +, =, or == have different implementations depending on the types of their arguments.
 
-### [Advanced] What is the 'override' keyword in C++ used for? 
+### [Advanced] 'override' & 'final' keyword in C++ as class specifier 
 The override[C++11] keyword serves two purposes:
 1. It shows the reader of the code that "this is a virtual method, that is overriding a virtual method of the base class.
 2. The compiler also knows that it's an override, so it can "check" that you are not altering/adding new methods that you think are overrides.
 ```C++
-class base
-{
-  public:
-    virtual int foo(float x) = 0;
+class Base {
+public:
+   virtual void f();
+   virtual void g();
+   void h();
 };
-class derived: public base
-{
-   public:
-     int foo(float x) override { ... } // OK
+class Derived: Base {
+public:
+   void f() override;
+   void g() final;
+   void h() override; // error as Base::f is not virtual
 }
-class derived2: public base
-{
-   public:
-     int foo(int x) override { ... } // ERROR: parameter list is different to base declaration
+class DerivedTwice: Derived {
+public:
+   void f(int i) override; // error: parameter list is different to base declaration
+   void g() override; // error as Derived::g is final
 };
 ```
-In derived2 the compiler will issue an error for "changing the type". Without override, at most the compiler would give a warning for "you are hiding virtual method by same name".
+In DerivedTwice::f the compiler will issue an error for "changing the type". Without override, at most the compiler would give a warning for "you are hiding virtual method by same name".
 
 ### virtual: dynamic binding
 * Let base class pointer / reference can transparently points to any derived class
@@ -364,12 +366,11 @@ int test::cast()
 ```
 
 ## C++ keywords : auto [C++11], extern, mutable, static
-* auto [C++11]: 新的變數類型，讓編譯器自動判斷其變數的類型
-1. compiler to determine the data type 
-2. Initial is necessary. Otherwise, the compiler is not able to know the type.
+* auto [C++11]: auto allow the compiler deduce the type of a variable from its initializer. 
+    > Initial is necessary. Otherwise, the compiler is not able to know the type.
 ```C++
-auto x = 1;// 等同於 int x = 1;
-auto y = sin(1.3);  // 等同於 double y = sin(1.3);
+auto x = 1;// int x = 1;
+auto y = sin(1.3);  //double y = sin(1.3);
 for(auto it = v.begin() ; it 1= v.end() ;++i) ; 
 ```
 * extern: tell the compiler this var or function already be declared in another file (translation unit)
