@@ -17,4 +17,4 @@
 [basic] misc
 ==============
 * data structure : array v.s. linked-list
-* gdb command: watch
+* gdb command : watch
