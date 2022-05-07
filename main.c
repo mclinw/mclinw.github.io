@@ -61,10 +61,6 @@ char* uitoa(unsigned int ui, char *a)
     do {
         *ra++ = '0' + (ui % 10);      
         ui /= 10;
-        // if(++i==m) {
-        //     printf("exception %d %s" , i,rev_a) ;
-        //     break;
-        // }
     } while (ui);
 
     /* return reversed ui string back to correct order */
