@@ -1,1 +1,1 @@
-[cpp_note](cpp_note.md)
+[cpp](cpp_note.md)
