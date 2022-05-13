@@ -1,5 +1,6 @@
+# C/C++ notes
 - [C/C++ notes](#cc-notes)
-  - [size of Primitive Data Types](#size-of-primitive-data-types)
+  - [Size of Primitive Data Types](#size-of-primitive-data-types)
   - [padding, alignment, union](#padding-alignment-union)
   - [pointer & reference](#pointer--reference)
     - [const char const * const c_ptr;](#const-char-const--const-c_ptr)
@@ -29,8 +30,7 @@
   - [forbid to generate a object in stack](#forbid-to-generate-a-object-in-stack)
   - [once-only header ( wrapper #ifndef )](#once-only-header--wrapper-ifndef-)
 - [fix or find error](#fix-or-find-error)
-# C/C++ notes
-## size of Primitive Data Types
+## Size of Primitive Data Types
 C stacndard only defines min size for primitive data types. 
 
 2 <= sizeof(short) <= sizeof(int) <= sizeof(long) >= 4
