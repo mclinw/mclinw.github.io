@@ -1,22 +1,5 @@
 # SQLite C Interface
 
-# sqlite object types
-* sqlite3 → The database connection object. Created by sqlite3_open() and destroyed by sqlite3_close().
-* sqlite3_stmt → The prepared statement object. Created by sqlite3_prepare() and destroyed by sqlite3_finalize().
-
-# sqlite functions
-The sqlite database connection and prepared statement objects are controlled by a small set of interface 
-routine listed below.
-* sqlite3_open() → Open a connection to a new or existing SQLite database. The constructor for sqlite3.
-* sqlite3_prepare() → Compile SQL text into byte-code that will do the work of querying or updating the database. The constructor for sqlite3_stmt.
-* sqlite3_step() → Advance an sqlite3_stmt to the next result row or to completion.
-* sqlite3_finalize() → Destructor for sqlite3_stmt.
-* sqlite3_close() → Destructor for sqlite3.
-
----
-
-# SQLite C Interface
-
 The database connection and prepared statement objects are controlled by a small set of C/C++ interface routine listed below.
 
 sqlite3_open()

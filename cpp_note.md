@@ -30,10 +30,10 @@
   - [forbid to generate a object in stack](#forbid-to-generate-a-object-in-stack)
   - [once-only header ( wrapper #ifndef )](#once-only-header--wrapper-ifndef-)
 - [fix or find error](#fix-or-find-error)
-## Size of Primitive Data Types
-C stacndard only defines min size for primitive data types. 
 
-2 <= sizeof(short) <= sizeof(int) <= sizeof(long) >= 4
+## Size of integer Types
+C stacndard only defines min size for primitive integer data types. 
+>2 <= sizeof(short) <= sizeof(int) <= sizeof(long) >= 4
 
 usually, long / pointer / size_t (unsigned type) are platform-dependency (32-bits/64-bits)
 
