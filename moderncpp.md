@@ -1,15 +1,5 @@
 # Modern C++ 
-after C++11
-
-# lvalue & rvalue
-* lvalues and rvalues are not restricted to assignment statements; that's just where the names originate. It turns out that every value in your code is an lvalue or rvalue. 
-    > To distinguish the two easily, ask yourself, "Does it have a name?" If it does, it's an lvalue (except for enumerators in an enumeration or non-type template parameters). Otherwise, it's an rvalue.
-* Lvalues are addressable and rvalues are not. For instance, you can write &a, but not &42.
-    > a = 42;    // lvalue = rvalue
-* Before C++11, the notions of lvalue- and rvalue-ness of values was important to compiler writers, but there was no way to express such things in user code.
-    >C++11 introduced rvalue references to enable move semantics and enable perfect forwarding.
-* "Old style", "normal" references are lvalue references, written like T & or T const &.
-    >Rvalue references use a double ampersand, like T && or T const &&.
+features since C++11
 
 ## auto
 ## constexpr
@@ -73,7 +63,19 @@ private:
 ```
 All constructors which do not specify an initial value for i_ or j_ are using the in-class specified one.
 
-## move 
+# move 
+to understand move, we need to understand lvalue & rvalue first. 
+## lvalue & rvalue
+* lvalues and rvalues are not restricted to assignment statements; that's just where the names originate. It turns out that every value in your code is an lvalue or rvalue. 
+    > To distinguish the two easily, ask yourself, "Does it have a name?" If it does, it's an lvalue (except for enumerators in an enumeration or non-type template parameters). Otherwise, it's an rvalue.
+* Lvalues are addressable and rvalues are not. For instance, you can write &a, but not &42.
+    > a = 42;    // lvalue = rvalue
+* Before C++11, the notions of lvalue- and rvalue-ness of values was important to compiler writers, but there was no way to express such things in user code.
+    >C++11 introduced rvalue references to enable move semantics and enable perfect forwarding.
+* "Old style", "normal" references are lvalue references, written like T & or T const &.
+    >Rvalue references use a double ampersand, like T && or T const &&.
+
+##  move
 https://vlsj-cqi01.cadence.com/tzlaine_talks/rvalues/slides/#/0/34
 * If you write any of these operations, you probably need to write all of them, unless your type is move-only, or doesn't have a move that is more efficient than copy: copy constructor, move constructor, assignment operator, move assignment operator, and destructor.
 * Use std::move() on an lvalue to treat it as an rvalue; remember that this is only a cast.

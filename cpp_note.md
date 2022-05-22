@@ -1,6 +1,6 @@
 # C/C++ notes
 - [C/C++ notes](#cc-notes)
-  - [Size of Primitive Data Types](#size-of-primitive-data-types)
+  - [Size of integer Types](#size-of-integer-types)
   - [padding, alignment, union](#padding-alignment-union)
   - [pointer & reference](#pointer--reference)
     - [const char const * const c_ptr;](#const-char-const--const-c_ptr)

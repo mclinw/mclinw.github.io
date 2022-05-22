@@ -38,10 +38,9 @@ int sqlite3_exec(
 - URI Filenames → The names of database files can be specified using either an ordinary filename or a URI. Using URI filenames provides additional capabilities, as this document describes.
 ---
 ### [Uniform Resource Identifiers](https://www.sqlite.org/uri.html)
-
-1. URI Filenames In SQLite
-Beginning with version 3.7.7 (2011-06-23), the SQLite database file argument to the sqlite3_open(), sqlite3_open16(), and sqlite3_open_v2() interfaces and to the ATTACH command can be specified either as an ordinary filename or as a Uniform Resource Identifier or URI. The advantage of using a URI filename is that query parameters on the URI can be used to control details of the newly created database connection. For example, an alternative VFS can be specified using a "vfs=" query parameter. Or the database can be opened read-only by using "mode=ro" as a query parameter.
-#### URI Filenames
-If URI filename interpretation is enabled, and the filename argument begins with "file:", then the filename is interpreted as a URI.
+* URI Filenames In SQLite
+>Beginning with version 3.7.7 (2011-06-23), the SQLite database file argument to the sqlite3_open(), sqlite3_open16(), and sqlite3_open_v2() interfaces and to the ATTACH command can be specified either as an ordinary filename or as a Uniform Resource Identifier or URI. The advantage of using a URI filename is that query parameters on the URI can be used to control details of the newly created database connection. For example, an alternative VFS can be specified using a "vfs=" query parameter. Or the database can be opened read-only by using "mode=ro" as a query parameter.
+* what is URI Filenames
+>If URI filename interpretation is enabled, and the filename argument begins with "file:", then the filename is interpreted as a URI.
 [examples](https://www.sqlite.org/c3ref/open.html#urifilenameexamples)
 

@@ -1,3 +1,5 @@
+notes about C programming 
+
 # C-string 
 ```C++
     char s [] = "Hello";
@@ -9,7 +11,8 @@
 // 0x55c5e4b43005==0x55c5e4b43005
 ```
 ---
-# if file exist
+# check if file exist
+an efficient way to chek if a file exising is using stat system call
 ```C
 static bool checkIfFileExists(const char* filename)
 {
