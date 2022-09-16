@@ -1,7 +1,7 @@
 # SQLite tcl interface
 Write Programs That Use SQLite
 Below is a simple TCL program that demonstrates how to use the TCL interface to SQLite. The program executes the SQL statements given as the second argument on the database defined by the first argument. The commands to watch for are the sqlite3 command on line 7 which opens an SQLite database and creates a new object named "db" to access that database, the use of the eval method on the db object on line 8 to run SQL commands against the database, and the closing of the database connection on the last line of the script.
-
+```
 01  #!/usr/bin/tclsh
 02  if {$argc!=2} {
 03    puts stderr "Usage: %s DATABASE SQL-STATEMENT"
@@ -16,6 +16,7 @@ Below is a simple TCL program that demonstrates how to use the TCL interface to 
 12    puts ""
 13  }
 14  db close
+```
 
 https://www.sqlite.org/quickstart.html
 ---

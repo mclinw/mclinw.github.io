@@ -1,7 +1,9 @@
 # Modern C++ 
 features since C++11
+---
 
 ## auto
+---
 ## constexpr
 * constexpr indicates a value that's constant and known during compilation.
 * const indicates a value that's only constant; it's not compulsory to know during compilation.
@@ -24,7 +26,7 @@ struct S {
 const S s0(0);     // constructor called at runtime
 constexpr S s1(1); // constructor called at compile time
 ```
-
+---
 ## Enum class
 Prefer scoped enum class to simple unscoped enum
 Avoid name conflicts
@@ -47,7 +49,7 @@ int n = r; // error: no scoped enum to int conversion
 Color r2 = 20; // error: no conversion from int to Color
 int n = static_cast<int>(r); // OK, n = 21 
 ```
-
+---
 ## In-class initializers
 More easily ensures that all the members are initialized in all the constructors.
 
@@ -62,7 +64,7 @@ private:
 };
 ```
 All constructors which do not specify an initial value for i_ or j_ are using the in-class specified one.
-
+---
 # move 
 to understand move, we need to understand lvalue & rvalue first. 
 ## lvalue & rvalue
@@ -75,7 +77,6 @@ to understand move, we need to understand lvalue & rvalue first.
 * "Old style", "normal" references are lvalue references, written like T & or T const &.
     >Rvalue references use a double ampersand, like T && or T const &&.
 
-##  move
 https://vlsj-cqi01.cadence.com/tzlaine_talks/rvalues/slides/#/0/34
 * If you write any of these operations, you probably need to write all of them, unless your type is move-only, or doesn't have a move that is more efficient than copy: copy constructor, move constructor, assignment operator, move assignment operator, and destructor.
 * Use std::move() on an lvalue to treat it as an rvalue; remember that this is only a cast.
@@ -108,7 +109,7 @@ foo = append_if_unique(foo, "aaa");
 auto bar = append_if_unique(std::move(foo), "bbb");
 ```
 * When returning values, just use return x. Don't use std::move(); it will only cause problems.
-
+---
 ## nullptr: Use nullptr instead of using 0 or NULL
 * nullptr has advantages over both 0 and NULL.  It is clearly mark the intend to have a null pointer value like NULL but won’t induce into error about its true type.
 ```C++
@@ -129,7 +130,7 @@ if (ptr != nullptr) {
 }
 ```
 * [C++11 nullptr](https://shengyu7697.github.io/cpp-nullptr/)
-
+---
 ## Range loop
 Allow to iterate on a STL containers
 ```C++
@@ -138,7 +139,7 @@ for (auto&& i: getValues()) {
    sum += i;
 }
 ```
-
+---
 # references
 * [Modern C++ (Lecture & Tutorials)](https://www.youtube.com/playlist?list=PLgnQpQtFTOGRM59sr3nSL8BmeMZR9GCIA)
 * [Modern C++ Tutorial: C++ 11/14/17/20 On the Fly](https://changkun.de/modern-cpp/en-us/00-preface/)
