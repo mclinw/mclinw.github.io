@@ -1,6 +1,20 @@
+- [Modern C++](#modern-c)
+  - [auto](#auto)
+  - [constexpr](#constexpr)
+  - [Enum class](#enum-class)
+  - [Forwarding constructors](#forwarding-constructors)
+  - [In-class initializers](#in-class-initializers)
+  - [initializer list](#initializer-list)
+- [move](#move)
+  - [lvalue \& rvalue](#lvalue--rvalue)
+  - [nullptr: Use nullptr instead of using 0 or NULL](#nullptr-use-nullptr-instead-of-using-0-or-null)
+  - [override and final](#override-and-final)
+  - [Range loop](#range-loop)
+- [references](#references)
+
+
 # Modern C++ 
 features since C++11
----
 
 ## auto
 ---
@@ -50,9 +64,20 @@ Color r2 = 20; // error: no conversion from int to Color
 int n = static_cast<int>(r); // OK, n = 21 
 ```
 ---
+## Forwarding constructors
+Those allow a constructor to “call” another one.  It is an alternative to specifying default value to parameters giving more flexibility.
+```C++
+
+class C {
+public:
+   C(int, std::string);
+   C(std::string s) : C(0, s) { /* some more things */ }
+};
+```
+
+---
 ## In-class initializers
 More easily ensures that all the members are initialized in all the constructors.
-
 ```C++
 class Trivial {
 public:
@@ -64,6 +89,12 @@ private:
 };
 ```
 All constructors which do not specify an initial value for i_ or j_ are using the in-class specified one.
+
+---
+## initializer list
+X x3{1, 1.2};
+
+
 ---
 # move 
 to understand move, we need to understand lvalue & rvalue first. 
@@ -131,6 +162,28 @@ if (ptr != nullptr) {
 ```
 * [C++11 nullptr](https://shengyu7697.github.io/cpp-nullptr/)
 ---
+## override and final
+Those allows to annotate functions which overrides virtual functions of the base class.
+```C++
+class Base {
+public:
+   virtual void f();
+   virtual void g();
+   void h();
+};
+class Derived: Base {
+public:
+   void f() override;
+   void g() final;
+   void h() override; // error as Base::f is not virtual
+}
+class DerivedTwice: Derived {
+public:
+   void g() override; // error as Derived::g is final
+};
+```
+---
+
 ## Range loop
 Allow to iterate on a STL containers
 ```C++
